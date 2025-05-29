@@ -2,6 +2,7 @@ import requests
 import threading
 import time
 
+#Добавляем ссылки
 urls = ['https://auto.ru/?utm_referrer=https%3A%2F%2Fwww.google.com%2F',
 'https://www.drom.ru/',
 'https://av.by/',
@@ -14,10 +15,12 @@ urls = ['https://auto.ru/?utm_referrer=https%3A%2F%2Fwww.google.com%2F',
 'https://www.mercedes-benz.com/en/'
 ]
 
+#Функция, которая покажет какой сайт загружен и сколько было загружено
 def download(url):
     response = requests.get(url)
-    print(f'Downloaded{url} (size: {len(response.content)} bytes)')
+    print(f'Downloaded {url} (size: {len(response.content)} bytes)')
 
+#Загрузка сайтов без потоков
 def without_threading():
     start_time = time.time()
   
@@ -26,9 +29,9 @@ def without_threading():
     
     end_time = time.time()
     print(f"Without threading: {end_time - start_time:.7f} sec")
-    return float(end_time - start_time)
+    return end_time - start_time
 
-
+#Загрузка сайтов с потоками
 def with_threading():
     start_time = time.time()
     
@@ -42,15 +45,26 @@ def with_threading():
         thread.join()
     
     end_time = time.time()
-    print(f"With threading:{end_time - start_time:.7f} sec\n")
-    return float(end_time - start_time)
+    print(f"With threading:{end_time - start_time:.7f} sec")
+    return end_time - start_time
 
-
+#Функция, сравнивающая время выполнения функций
 def compare(without_time, with_time):
-    improvement = without_time - with_time
+    difference = without_time - with_time
 
     print(f"Without threading time {without_time:.7f} sec ")
     print(f"With threading time{with_time:.7f} sec ")
-    print(f"Difference:{improvement}  ")
+    print(f"Difference:{difference} ")
 
-compare(without_threading,with_threading)
+without_time = without_threading() 
+with_time = with_threading()
+
+
+def main():
+    without_threading()
+    with_threading()
+    compare(without_time,with_time)
+
+    
+if __name__ == "__main__":
+    main()
